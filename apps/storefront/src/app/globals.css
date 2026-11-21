@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/* Theme values are injected per store as CSS variables on .sk-store. */
+.sk-store {
+  background: var(--sk-bg);
+  color: var(--sk-text);
+  font-family: var(--sk-body-font), ui-sans-serif, system-ui, sans-serif;
+}
+
+.sk-heading {
+  font-family: var(--sk-heading-font), ui-serif, Georgia, serif;
+}
+
+.sk-muted {
+  color: color-mix(in srgb, var(--sk-text) 68%, transparent);
+}
+
+.sk-primary-bg {
+  background: var(--sk-primary);
+  color: #fff;
+}
+
+.sk-primary-text {
+  color: var(--sk-primary);
+}
+
+.sk-accent-bg {
+  background: var(--sk-accent);
+}
+
+.sk-soft-bg {
+  background: color-mix(in srgb, var(--sk-primary) 6%, var(--sk-bg));
+}
+
+.sk-border {
+  border-color: color-mix(in srgb, var(--sk-text) 12%, transparent);
+}
+
+.sk-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  background: var(--sk-primary);
+  color: #fff;
+  transition: opacity 150ms;
+}
+
+.sk-button:hover {
+  opacity: 0.9;
+}
+
+/* For buttons on photos and coloured backgrounds. */
+.sk-button-light {
+  background: #fff;
+  color: var(--sk-primary);
+}
+
+.sk-placeholder {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--sk-primary) 22%, var(--sk-bg)),
+    color-mix(in srgb, var(--sk-accent) 35%, var(--sk-bg))
+  );
+}
+
+/* Store-wide style options (settings.style), set as data attributes on .sk-store. */
+.sk-store[data-buttons="rounded"] .sk-button {
+  border-radius: 0.5rem;
+}
+
+.sk-store[data-buttons="square"] .sk-button {
+  border-radius: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.sk-card {
+  border-radius: 0.5rem;
+}
+
+.sk-store[data-cards="bordered"] .sk-card {
+  border: 1px solid color-mix(in srgb, var(--sk-text) 12%, transparent);
+  padding: 0.5rem 0.5rem 0.75rem;
+  background: var(--sk-bg);
+}
+
+.sk-store[data-cards="shadow"] .sk-card {
+  padding: 0.5rem 0.5rem 0.75rem;
+  border-radius: 1rem;
+  background: var(--sk-bg);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px -8px rgb(0 0 0 / 0.15);
+  transition: box-shadow 200ms, transform 200ms;
+}
+
+.sk-store[data-cards="shadow"] .sk-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.06), 0 16px 32px -12px rgb(0 0 0 / 0.25);
+}
+
+.sk-card-surface {
+  background: var(--sk-bg);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 8px 24px -10px rgb(0 0 0 / 0.15);
+}
+
+/* Parallax: background layers are moved on scroll by the Parallax component, each at its own speed. */
+.sk-parallax {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Taller than the section so moving it never uncovers an edge. */
+.sk-parallax-layer {
+  position: absolute;
+  inset: -35% 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.sk-parallax-fallback {
+  background: linear-gradient(135deg, var(--sk-primary), color-mix(in srgb, var(--sk-primary) 50%, #000));
+}
+
+.sk-parallax-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.25) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+.sk-parallax-glow {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sk-accent) 85%, transparent), transparent 70%);
+  will-change: transform;
+}
+
+.sk-parallax-ring {
+  position: absolute;
+  border-radius: 9999px;
+  border: 10px solid rgb(255 255 255 / 0.35);
+  will-change: transform;
+}
+
+.sk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.sk-table th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+}
+
+.sk-table td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+}
+
+.sk-table td:first-child {
+  font-weight: 500;
+}
+
+.sk-table[data-style="striped"] thead tr {
+  background: var(--sk-primary);
+  color: #fff;
+}
+
+.sk-table[data-style="striped"] tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--sk-primary) 6%, var(--sk-bg));
+}
+
+.sk-table[data-style="bordered"] th,
+.sk-table[data-style="bordered"] td {
+  border: 1px solid color-mix(in srgb, var(--sk-text) 14%, transparent);
+}
+
+.sk-table[data-style="bordered"] thead tr {
+  background: color-mix(in srgb, var(--sk-primary) 8%, var(--sk-bg));
+}
+
+.sk-table[data-style="minimal"] thead tr {
+  border-bottom: 2px solid var(--sk-text);
+}
+
+.sk-table[data-style="minimal"] tbody tr {
+  border-bottom: 1px solid color-mix(in srgb, var(--sk-text) 12%, transparent);
+}
+
+.sk-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.sk-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.sk-faq[open] .sk-faq-icon {
+  transform: rotate(45deg);
+}
+
+.sk-scroll-row {
+  scrollbar-width: thin;
+  scroll-snap-type: x mandatory;
+}
+
+.sk-scroll-row > * {
+  scroll-snap-align: start;
+}

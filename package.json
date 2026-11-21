@@ -1,0 +1,27 @@
+{
+  "name": "shopkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shopkit — store builder where sellers create and run their own online store. Monorepo.",
+  "packageManager": "pnpm@10.27.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:api": "turbo run dev --filter=@shopkit/api...",
+    "dev:admin": "turbo run dev --filter=@shopkit/admin...",
+    "dev:storefront": "turbo run dev --filter=@shopkit/storefront...",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "migration:run": "pnpm --filter @shopkit/api migration:run"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  }
+}

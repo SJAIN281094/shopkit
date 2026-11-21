@@ -1,0 +1,810 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddressInput {
+  city: String!
+  line1: String!
+  line2: String! = ""
+  pincode: String!
+
+  """GST state code, e.g. "27" for Maharashtra"""
+  stateCode: String!
+}
+
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
+type BillingCheckout {
+  amount: Int!
+  billingPaymentId: ID!
+  description: String!
+  gateway: String!
+  gatewayOrderId: String!
+  keyId: String
+}
+
+enum BillingKind {
+  AI_CREDITS
+  PLAN
+}
+
+type BillingOverview {
+  aiCreditsBalance: Int!
+  creditPacks: [CreditPackInfo!]!
+  payments: [BillingPayment!]!
+  plan: PlanInfo!
+  planExpiresAt: DateTime
+  plans: [PlanInfo!]!
+  productCount: Int!
+}
+
+type BillingPayment {
+  """In paise"""
+  amount: Int!
+  createdAt: DateTime!
+
+  """AI credits added when paid"""
+  credits: Int!
+  id: ID!
+  kind: BillingKind!
+  paidAt: DateTime
+  plan: ShopPlan
+  status: BillingStatus!
+  updatedAt: DateTime!
+}
+
+input BillingPaymentIdInput {
+  billingPaymentId: ID!
+}
+
+enum BillingStatus {
+  CREATED
+  FAILED
+  PAID
+}
+
+input BusinessSettingsInput {
+  businessAddress: String
+  defaultGstRate: Int!
+  gstin: String
+  legalName: String
+  stateCode: String
+}
+
+input BuyCreditsInput {
+  packKey: String!
+}
+
+input BuyPlanInput {
+  plan: ShopPlan!
+}
+
+input CartLineInput {
+  quantity: Int!
+  variantId: ID!
+}
+
+input CheckoutSettingsInput {
+  codEnabled: Boolean!
+
+  """Paise; leave empty to always charge shipping"""
+  freeShippingAbove: Int
+
+  """Paise"""
+  shippingFee: Int!
+}
+
+type Collection {
+  createdAt: DateTime!
+  description: String!
+
+  """URL slug, e.g. /collections/<handle>"""
+  handle: String!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+input CollectionInput {
+  description: String! = ""
+  name: String!
+}
+
+input ConfirmBillingPaymentInput {
+  billingPaymentId: ID!
+  paymentId: String!
+  signature: String!
+}
+
+input ConfirmPaymentInput {
+  orderId: ID!
+  paymentId: String!
+  signature: String!
+  token: String!
+}
+
+input CreateShopInput {
+  name: String!
+  subdomain: String!
+}
+
+input CreateThemeFromTemplateInput {
+  templateKey: String!
+}
+
+input CreateThemePreviewInput {
+  themeId: ID!
+
+  """Lets the editor show unsaved changes through this preview"""
+  withDraft: Boolean
+}
+
+type CreditPackInfo {
+  credits: Int!
+  key: String!
+  price: Int!
+}
+
+input CustomDomainInput {
+  """e.g. shop.example.com"""
+  domain: String!
+}
+
+input CustomerInput {
+  email: String
+  name: String!
+
+  """10-digit Indian mobile number"""
+  phone: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DomainDnsRecords {
+  cnameName: String!
+  cnameTarget: String!
+  txtName: String!
+  txtValue: String!
+}
+
+input GenerateListingInput {
+  """
+  Optional words about the product, e.g. "blue cotton kurta"
+  """
+  hint: String! = ""
+
+  """URL returned by POST /uploads/images for this store"""
+  imageUrl: String!
+}
+
+input GenerateThemeInput {
+  """What the seller sells, in their own words"""
+  description: String!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  buyAiCredits(input: BuyCreditsInput!): BillingCheckout!
+  buyPlan(input: BuyPlanInput!): BillingCheckout!
+
+  """Restocks items and refunds online payments"""
+  cancelOrder(id: ID!): Order!
+  confirmBillingPayment(input: ConfirmBillingPaymentInput!): BillingOverview!
+
+  """Verifies the Razorpay signature and marks the order paid"""
+  confirmOrderPayment(host: String!, input: ConfirmPaymentInput!): Order!
+  createCollection(input: CollectionInput!): Collection!
+  createProduct(input: ProductInput!): Product!
+  createShop(input: CreateShopInput!): Shop!
+  createThemeFromTemplate(input: CreateThemeFromTemplateInput!): Theme!
+  createThemePreview(input: CreateThemePreviewInput!): ThemePreview!
+
+  """Products in the collection are kept, just unassigned"""
+  deleteCollection(id: ID!): Boolean!
+  deleteProduct(id: ID!): Boolean!
+  deleteTheme(input: ThemeIdInput!): Boolean!
+
+  """Uses AI credits. Drafts a title and description from a photo"""
+  generateProductListing(input: GenerateListingInput!): ProductListingSuggestion!
+
+  """Uses AI credits"""
+  generateThemeWithAi(input: GenerateThemeInput!): Theme!
+  login(input: LoginInput!): AuthPayload!
+
+  """Cash-on-delivery orders are marked paid"""
+  markOrderDelivered(id: ID!): Order!
+
+  """Also used to update tracking details"""
+  markOrderShipped(input: ShipOrderInput!): Order!
+  placeOrder(host: String!, input: PlaceOrderInput!): PlaceOrderResult!
+  publishTheme(input: ThemeIdInput!): Theme!
+  removeCustomDomain: ShopSettings!
+
+  """Payment details for an order still awaiting payment"""
+  resumeOrderPayment(host: String!, input: OrderAccessInput!): PaymentRequest!
+  setCustomDomain(input: CustomDomainInput!): ShopSettings!
+
+  """Shows unsaved editor changes in a draft preview; nothing is saved"""
+  setThemePreviewDraft(input: ThemePreviewDraftInput!): Boolean!
+  signup(input: SignupInput!): AuthPayload!
+
+  """Development only"""
+  simulateBillingPayment(input: BillingPaymentIdInput!): TestPaymentResult!
+
+  """Development only: pays an order on the test gateway"""
+  simulateTestPayment(host: String!, input: OrderAccessInput!): TestPaymentResult!
+  updateBusinessSettings(input: BusinessSettingsInput!): ShopSettings!
+  updateCheckoutSettings(input: CheckoutSettingsInput!): ShopSettings!
+  updateCollection(id: ID!, input: CollectionInput!): Collection!
+  updatePaymentSettings(input: PaymentSettingsInput!): ShopSettings!
+  updateProduct(id: ID!, input: ProductInput!): Product!
+  updateStoreSettings(input: StoreSettingsInput!): ShopSettings!
+
+  """Saves design edits; edits to the live design go live immediately"""
+  updateTheme(input: UpdateThemeInput!): Theme!
+
+  """Checks the _shopkit TXT record"""
+  verifyCustomDomain: ShopSettings!
+}
+
+type MyShop {
+  role: ShopRole!
+  shop: Shop!
+}
+
+type Order {
+  """Lets the buyer view this order; keep private"""
+  accessToken: String!
+  cancelledAt: DateTime
+  createdAt: DateTime!
+  customer: OrderCustomer!
+  deliveredAt: DateTime
+
+  """Unpaid online orders are cancelled and restocked after this"""
+  expiresAt: DateTime
+  gatewayPaymentId: String
+  id: ID!
+  invoiceNumber: String
+  items: [OrderItem!]!
+  note: String
+
+  """Per-store order number shown to buyers, e.g. #1001"""
+  number: Int!
+  paidAt: DateTime
+  paymentMethod: PaymentMethod!
+  paymentStatus: PaymentStatus!
+  shippedAt: DateTime
+  shippingAddress: OrderAddress!
+  shippingFee: Int!
+  status: OrderStatus!
+  subtotal: Int!
+
+  """Only when the store has a GSTIN"""
+  tax: OrderTax
+  total: Int!
+  trackingNumber: String
+  trackingUrl: String
+  updatedAt: DateTime!
+}
+
+input OrderAccessInput {
+  orderId: ID!
+  token: String!
+}
+
+type OrderAddress {
+  city: String!
+  line1: String!
+  line2: String!
+  pincode: String!
+  state: String!
+  stateCode: String!
+}
+
+type OrderCounts {
+  shipped: Int!
+
+  """Placed and waiting to be shipped"""
+  toShip: Int!
+  total: Int!
+}
+
+type OrderCustomer {
+  email: String
+  name: String!
+
+  """91XXXXXXXXXX"""
+  phone: String!
+}
+
+input OrderFilter {
+  """Order number, customer name or phone"""
+  search: String
+  status: OrderStatus
+}
+
+type OrderItem {
+  gstRate: Int!
+  handle: String!
+  hsnCode: String
+  image: String
+  lineTotal: Int!
+  productId: ID
+  quantity: Int!
+  title: String!
+  unitPrice: Int!
+  variantId: ID
+  variantTitle: String!
+}
+
+enum OrderStatus {
+  CANCELLED
+  DELIVERED
+  PENDING_PAYMENT
+  PLACED
+  SHIPPED
+}
+
+type OrderTax {
+  cgst: Int!
+  igst: Int!
+  sgst: Int!
+  taxable: Int!
+}
+
+enum PaymentMethod {
+  COD
+  ONLINE
+}
+
+type PaymentRequest {
+  amount: Int!
+
+  """
+  "razorpay" or "test"
+  """
+  gateway: String!
+  gatewayOrderId: String!
+
+  """Razorpay key id for the checkout script"""
+  keyId: String
+}
+
+input PaymentSettingsInput {
+  paymentsTestMode: Boolean!
+
+  """Empty to remove Razorpay"""
+  razorpayKeyId: String
+
+  """Leave empty to keep the saved secret"""
+  razorpayKeySecret: String
+
+  """Leave empty to keep the saved secret"""
+  razorpayWebhookSecret: String
+}
+
+enum PaymentStatus {
+  FAILED
+  PAID
+  PENDING
+  REFUNDED
+}
+
+input PlaceOrderInput {
+  address: AddressInput!
+  customer: CustomerInput!
+  items: [CartLineInput!]!
+  note: String
+  paymentMethod: PaymentMethod!
+}
+
+type PlaceOrderResult {
+  order: Order!
+
+  """Present when the buyer still has to pay online"""
+  payment: PaymentRequest
+}
+
+type PlanInfo {
+  aiCredits: Int!
+  customDomain: Boolean!
+  maxProducts: Int!
+  name: String!
+  plan: ShopPlan!
+
+  """Paise per 30 days"""
+  price: Int!
+}
+
+type Product {
+  collection: Collection
+  collectionId: ID
+
+  """Original price of the lowest-priced variant; in paise"""
+  compareAtPrice: Int
+  createdAt: DateTime!
+  description: String!
+
+  """GST %, or null to use the store default"""
+  gstRate: Int
+
+  """URL slug, e.g. /products/<handle>"""
+  handle: String!
+  hsnCode: String
+  id: ID!
+  images: [String!]!
+
+  """e.g. Size: S, M, L. Empty for simple products"""
+  options: [ProductOptionType!]!
+
+  """Lowest variant price, in paise"""
+  price: Int!
+  status: ProductStatus!
+
+  """Total units across variants; null if any variant is not tracked"""
+  stock: Int
+  title: String!
+  updatedAt: DateTime!
+  variants: [ProductVariant!]!
+}
+
+input ProductFilter {
+  collectionId: ID
+  search: String
+  status: ProductStatus
+}
+
+input ProductInput {
+  collectionId: ID
+
+  """In paise; must be higher than price"""
+  compareAtPrice: Int
+  description: String! = ""
+
+  """GST %; leave empty to use the store default"""
+  gstRate: Int
+  hsnCode: String
+  images: [String!]! = []
+  options: [ProductOptionInput!]! = []
+
+  """In paise. Required when the product has no options"""
+  price: Int
+  status: ProductStatus! = ACTIVE
+
+  """Leave empty to sell without tracking stock"""
+  stock: Int
+  title: String!
+
+  """Required when the product has options"""
+  variants: [ProductVariantInput!]! = []
+}
+
+type ProductListingSuggestion {
+  """An existing collection that fits, if any"""
+  collectionId: ID
+  description: String!
+  title: String!
+}
+
+input ProductOptionInput {
+  """
+  e.g. "Size"
+  """
+  name: String!
+
+  """e.g. ["S", "M", "L"]"""
+  values: [String!]!
+}
+
+type ProductOptionType {
+  name: String!
+  values: [String!]!
+}
+
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+}
+
+type ProductVariant {
+  """In paise"""
+  compareAtPrice: Int
+  createdAt: DateTime!
+  id: ID!
+
+  """One value per product option, in option order"""
+  optionValues: [String!]!
+
+  """In paise"""
+  price: Int!
+  sku: String
+
+  """null means stock is not tracked"""
+  stock: Int
+
+  """e.g. "M / Indigo"; empty for products without options"""
+  title: String!
+  updatedAt: DateTime!
+}
+
+input ProductVariantInput {
+  compareAtPrice: Int
+
+  """One value per product option, in option order"""
+  optionValues: [String!]!
+
+  """In paise"""
+  price: Int!
+  sku: String
+  stock: Int
+}
+
+type Query {
+  """AI credits charged for one product listing suggestion"""
+  aiProductListingCost: Int!
+
+  """AI credits charged for one store generation"""
+  aiStoreGenerationCost: Int!
+  billingOverview: BillingOverview!
+  collections: [Collection!]!
+
+  """The store selected by the x-shop-id header"""
+  currentShop: Shop!
+  me: User!
+  myShops: [MyShop!]!
+  order(id: ID!): Order!
+  orderCounts: OrderCounts!
+  orders(filter: OrderFilter): [Order!]!
+  product(id: ID!): Product!
+  products(filter: ProductFilter): [Product!]!
+  shopSettings: ShopSettings!
+
+  """Public store data for the storefront app, looked up by request host"""
+  storefront(host: String!, previewToken: String): StorefrontPayload
+
+  """Use handle "all" for every product"""
+  storefrontCollection(
+    handle: String!
+    host: String!
+    page: Int! = 1
+    pageSize: Int! = 48
+
+    """newest, price-asc, price-desc or name"""
+    sort: String! = "newest"
+  ): StorefrontCollectionPage
+  storefrontOrder(host: String!, input: OrderAccessInput!): Order!
+  storefrontProduct(handle: String!, host: String!): Product
+
+  """Active products for a store, newest first unless sorted"""
+  storefrontProducts(
+    collectionHandle: String
+    host: String!
+    limit: Int! = 12
+
+    """newest, price-asc, price-desc or name"""
+    sort: String! = "newest"
+  ): [Product!]!
+  subdomainAvailability(subdomain: String!): SubdomainAvailability!
+  theme(id: ID!): Theme!
+  themeTemplates: [ThemeTemplateInfo!]!
+  themes: [Theme!]!
+}
+
+input ShipOrderInput {
+  orderId: ID!
+  trackingNumber: String
+  trackingUrl: String
+}
+
+type Shop {
+  aiCreditsBalance: Int!
+  aiEnabled: Boolean!
+  createdAt: DateTime!
+  currency: String!
+  id: ID!
+  name: String!
+  status: ShopStatus!
+  subdomain: String!
+  updatedAt: DateTime!
+}
+
+enum ShopPlan {
+  FREE
+  GROWTH
+  STARTER
+}
+
+enum ShopRole {
+  ADMIN
+  OWNER
+  STAFF
+}
+
+type ShopSettings {
+  aiEnabled: Boolean!
+  businessAddress: String
+  codEnabled: Boolean!
+
+  """Order emails go here; defaults to the owner"""
+  contactEmail: String
+  customDomain: String
+
+  """Whether the current plan includes a custom domain"""
+  customDomainAllowed: Boolean!
+  customDomainVerified: Boolean!
+  defaultGstRate: Int!
+  domainDns: DomainDnsRecords
+  freeShippingAbove: Int
+  gstin: String
+  legalName: String
+  name: String!
+  paymentsTestMode: Boolean!
+  plan: ShopPlan!
+  razorpayConfigured: Boolean!
+  razorpayKeyId: String
+  razorpayWebhookConfigured: Boolean!
+
+  """Paste into Razorpay → Webhooks; events payment.captured and order.paid"""
+  razorpayWebhookUrl: String!
+  shippingFee: Int!
+  stateCode: String
+
+  """Where buyers find the store"""
+  storeUrl: String!
+  subdomain: String!
+  testPaymentsAllowed: Boolean!
+}
+
+enum ShopStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+input SignupInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input StoreSettingsInput {
+  aiEnabled: Boolean!
+  contactEmail: String
+  name: String!
+}
+
+type StorefrontCollectionPage {
+  collection: Collection!
+  page: Int!
+  pageSize: Int!
+
+  """Products on this page"""
+  products: [Product!]!
+
+  """Products in the whole collection"""
+  total: Int!
+}
+
+type StorefrontPayload {
+  isPreview: Boolean!
+
+  """Null when the store has not published a design yet"""
+  layout: JSON
+  shop: StorefrontShop!
+}
+
+type StorefrontShop {
+  codEnabled: Boolean!
+  currency: String!
+
+  """Paise; orders at or above this ship free"""
+  freeShippingAbove: Int
+  id: ID!
+  name: String!
+
+  """Buyers can pay online (UPI, cards, netbanking)"""
+  onlinePayments: Boolean!
+
+  """Paise"""
+  shippingFee: Int!
+  subdomain: String!
+
+  """Online payments go through a fake gateway; development only"""
+  testPayments: Boolean!
+}
+
+type SubdomainAvailability {
+  available: Boolean!
+  reason: String
+}
+
+type TestPaymentResult {
+  paymentId: String!
+  signature: String!
+}
+
+type Theme {
+  createdAt: DateTime!
+  id: ID!
+  layout: JSON!
+  name: String!
+  publishedAt: DateTime
+  source: ThemeSource!
+  status: ThemeStatus!
+  templateKey: String
+  updatedAt: DateTime!
+}
+
+input ThemeIdInput {
+  themeId: ID!
+}
+
+type ThemePreview {
+  draftId: ID
+  expiresAt: DateTime!
+  token: String!
+}
+
+input ThemePreviewDraftInput {
+  draftId: ID!
+  layout: JSON!
+  themeId: ID!
+}
+
+enum ThemeSource {
+  AI
+  TEMPLATE
+}
+
+enum ThemeStatus {
+  ARCHIVED
+  DRAFT
+  PUBLISHED
+}
+
+type ThemeTemplateInfo {
+  accentColor: String!
+  backgroundColor: String!
+  description: String!
+  headingFont: String!
+  key: String!
+
+  """
+  Page structure key: classic, editorial, parallax, catalog, playful or minimal
+  """
+  layout: String!
+  layoutDescription: String!
+  layoutName: String!
+  name: String!
+  primaryColor: String!
+}
+
+input UpdateThemeInput {
+  """Full store layout; validated against the theme schema"""
+  layout: JSON!
+  name: String
+  themeId: ID!
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  updatedAt: DateTime!
+}
